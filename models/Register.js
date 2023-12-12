@@ -11,13 +11,8 @@ const RegisterSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    minlength: [6, "Password must be at least 6 characters long"],
     required: [true, "Password cannot be empty"],
-    validate: {
-      validator: (password) => {
-        return password.length >= 6;
-      },
-      message: "Password must be at least 6 characters long",
-    },
   },
 });
 
