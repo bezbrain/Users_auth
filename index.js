@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+// Import db connection function
+const connectDB = require("./db/connect");
+
 // Import the env package and invoke
 require("dotenv").config();
 // Import the async error that handles the async..await
@@ -33,4 +36,13 @@ app.use(errorHandlingMiddleware);
 // Not found middleware
 app.use(notFoundMiddleware);
 
-app.listen(port, console.log(`Server is listening on port ${port}`));
+// Start server and DB
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+    app.listen(port, console.log(`Server is listening on port ${port}`));
+  } catch (error) {
+    console.log(error);
+  }
+};
+start();
