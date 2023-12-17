@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const RegCollection = require("../models/Register");
 const jwt = require("jsonwebtoken");
+const BadRequestError = require("../errors/bad-request");
 
 const handleLogin = async (req, res) => {
   // console.log(req.body);
@@ -22,10 +23,7 @@ const handleLogin = async (req, res) => {
       token,
     });
   }
-  res.status(StatusCodes.BAD_REQUEST).json({
-    success: false,
-    message: "Username and password do not match",
-  });
+  throw new BadRequestError("Username and password do not match");
 };
 
 module.exports = { handleLogin };

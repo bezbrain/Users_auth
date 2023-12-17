@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const RegCollection = require("../models/Register");
+const BadRequestError = require("../errors/bad-request");
 
 const handleRegister = async (req, res) => {
   const { username, email } = req.body;
@@ -9,10 +10,7 @@ const handleRegister = async (req, res) => {
   });
   // Check if username already exists in the db
   if (existingUsername) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      success: false,
-      message: "Username already existed",
-    });
+    throw new BadRequestError("Username already existed");
   }
 
   // Check if email already exists in the db
@@ -20,10 +18,7 @@ const handleRegister = async (req, res) => {
     email,
   });
   if (existingEmail) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      success: false,
-      message: "Email already existed",
-    });
+    throw new BadRequestError("Email already existed");
   }
   // console.log(existingUsername);
   const user = await RegCollection.create(req.body);
